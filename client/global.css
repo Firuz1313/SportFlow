@@ -108,6 +108,20 @@
   }
 }
 
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  html {
+    overflow-y: auto;
+  }
+  body {
+    overflow-y: auto;
+  }
+}
+
 /* Motion path animation for sports ball */
 @keyframes path-progress {
   0% {

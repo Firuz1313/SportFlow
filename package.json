@@ -31,6 +31,7 @@
     "grommet": "^2.49.0",
     "grommet-icons": "^4.14.0",
     "onsenui": "^2.12.8",
+    "pg": "^8.16.3",
     "react-onsenui": "^1.13.3",
     "styled-components": "^6.1.19",
     "zod": "^3.25.76"

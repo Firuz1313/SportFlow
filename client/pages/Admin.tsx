@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Athlete, ListResponse } from "@shared/api";
-import { Table, Form, Input, InputNumber, Select, Button, Space, Popconfirm, Avatar, Tabs, Tag } from "antd";
+import { Table, Form, Input, InputNumber, Select, Button, Space, Popconfirm, Avatar, Tabs, Tag, Upload, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 async function fetchAthletes(): Promise<ListResponse<Athlete>> {

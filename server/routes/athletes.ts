@@ -10,7 +10,10 @@ async function getPool() {
   if (!process.env.DATABASE_URL) return null;
   if (pool) return pool;
   const { Pool } = await import("pg");
-  pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  });
   await pool.query(`
     CREATE TABLE IF NOT EXISTS athletes (
       id text PRIMARY KEY,
@@ -33,7 +36,9 @@ export const listAthletes: RequestHandler = async (_req, res) => {
   try {
     const pg = await getPool();
     if (pg) {
-      const r = await pg.query("SELECT * FROM athletes ORDER BY created_at DESC LIMIT 100");
+      const r = await pg.query(
+        "SELECT * FROM athletes ORDER BY created_at DESC LIMIT 100",
+      );
       const items: Athlete[] = r.rows.map((row: any) => ({
         id: row.id,
         firstName: row.first_name,
@@ -59,7 +64,16 @@ export const listAthletes: RequestHandler = async (_req, res) => {
 
 export const createAthlete: RequestHandler = async (req, res) => {
   try {
-    const { firstName, lastName, sport, age, avatarUrl, videoUrl, team, metrics } = req.body ?? {};
+    const {
+      firstName,
+      lastName,
+      sport,
+      age,
+      avatarUrl,
+      videoUrl,
+      team,
+      metrics,
+    } = req.body ?? {};
     if (!firstName || !lastName || !sport || typeof age !== "number") {
       res.status(400).json({ error: "Missing required fields" });
       return;
@@ -160,7 +174,11 @@ export const updateAthlete: RequestHandler = async (req, res) => {
     }
     const idx = memory.findIndex((a) => a.id === id);
     if (idx === -1) return res.status(404).json({ error: "Not found" });
-    const updated: Athlete = { ...memory[idx], ...patch, updatedAt: new Date().toISOString() };
+    const updated: Athlete = {
+      ...memory[idx],
+      ...patch,
+      updatedAt: new Date().toISOString(),
+    };
     memory[idx] = updated;
     res.json(updated);
   } catch (e) {

@@ -14,7 +14,10 @@ declare module "express-serve-static-core" {
   }
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
 export const requireAuth: RequestHandler = async (req, res, next) => {
   try {
@@ -28,7 +31,11 @@ export const requireAuth: RequestHandler = async (req, res, next) => {
       `SELECT r.name as role FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = $1`,
       [payload.sub],
     );
-    req.user = { id: payload.sub, email: payload.email, roles: rows.map((r) => r.role) };
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      roles: rows.map((r) => r.role),
+    };
     next();
   } catch (e) {
     return res.status(401).json({ error: "Unauthorized" });

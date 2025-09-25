@@ -13,7 +13,10 @@ async function fetchAthletes(): Promise<ListResponse<Athlete>> {
 }
 
 export default function Index() {
-  const { data, isLoading } = useQuery({ queryKey: ["athletes"], queryFn: fetchAthletes });
+  const { data, isLoading } = useQuery({
+    queryKey: ["athletes"],
+    queryFn: fetchAthletes,
+  });
   const items = data?.items ?? [];
 
   const columns: ColumnsType<Athlete> = useMemo(
@@ -24,12 +27,20 @@ export default function Index() {
         key: "name",
         render: (_: any, a: Athlete) => (
           <div className="flex items-center gap-3">
-            <Avatar src={a.avatarUrl} size={40} style={{ backgroundColor: "#87d068" }}>
+            <Avatar
+              src={a.avatarUrl}
+              size={40}
+              style={{ backgroundColor: "#87d068" }}
+            >
               {a.firstName[0]}
             </Avatar>
             <div>
-              <div className="font-semibold">{a.firstName} {a.lastName}</div>
-              <div className="text-foreground/60 text-xs">{a.team ?? "Индивидуально"}</div>
+              <div className="font-semibold">
+                {a.firstName} {a.lastName}
+              </div>
+              <div className="text-foreground/60 text-xs">
+                {a.team ?? "Индивидуально"}
+              </div>
             </div>
           </div>
         ),
@@ -41,9 +52,15 @@ export default function Index() {
         key: "metrics",
         render: (_: any, a: Athlete) => (
           <div className="flex gap-2">
-            {a.metrics?.speed != null && <Tag color="green">Скорость: {a.metrics.speed}</Tag>}
-            {a.metrics?.endurance != null && <Tag color="blue">Выносливость: {a.metrics.endurance}</Tag>}
-            {a.metrics?.strength != null && <Tag color="gold">Сила: {a.metrics.strength}</Tag>}
+            {a.metrics?.speed != null && (
+              <Tag color="green">Скорость: {a.metrics.speed}</Tag>
+            )}
+            {a.metrics?.endurance != null && (
+              <Tag color="blue">Выносливость: {a.metrics.endurance}</Tag>
+            )}
+            {a.metrics?.strength != null && (
+              <Tag color="gold">Сила: {a.metrics.strength}</Tag>
+            )}
           </div>
         ),
       },
@@ -51,10 +68,13 @@ export default function Index() {
     [],
   );
 
-  const totals = useMemo(() => ({
-    athletes: items.length,
-    withTeams: items.filter((a) => a.team).length,
-  }), [items]);
+  const totals = useMemo(
+    () => ({
+      athletes: items.length,
+      withTeams: items.filter((a) => a.team).length,
+    }),
+    [items],
+  );
 
   return (
     <div className="bg-gradient-to-b from-white to-secondary/30">
@@ -66,11 +86,23 @@ export default function Index() {
               Динамическая платформа управления спортсменами
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
-              Регистрация и профили, роли (админ/спортсмен/тренер), аналитика и статистика, загрузка фото/видео и адаптивные интерфейсы для веба и мобильных устройств.
+              Регистрация и профили, роли (админ/спортсмен/тренер), аналитика и
+              статистика, загрузка фото/видео и адаптивные интерфейсы для веба и
+              мобильных устройств.
             </p>
             <div className="mt-6 flex gap-3">
-              <a href="/admin" className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-5 py-2.5 font-semibold shadow hover:opacity-90 transition">Перейти в админ-панель</a>
-              <a href="#athletes" className="inline-flex items-center justify-center rounded-md border px-5 py-2.5 font-semibold hover:bg-secondary transition">Смотреть спортсменов</a>
+              <a
+                href="/admin"
+                className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-5 py-2.5 font-semibold shadow hover:opacity-90 transition"
+              >
+                Перейти в админ-панель
+              </a>
+              <a
+                href="#athletes"
+                className="inline-flex items-center justify-center rounded-md border px-5 py-2.5 font-semibold hover:bg-secondary transition"
+              >
+                Смотреть спортсменов
+              </a>
             </div>
             <div className="mt-6">
               <div className="grid grid-cols-3 gap-4 max-w-md">
@@ -84,13 +116,15 @@ export default function Index() {
             <Card shadow="sm" className="border">
               <CardHeader className="font-semibold">Администратор</CardHeader>
               <CardBody className="text-foreground/70 text-sm">
-                Управление пользователями и ролями, модерация контента, настройки доступа и аналитика системы.
+                Управление пользователями и ролями, модерация контента,
+                настройки доступа и аналитика системы.
               </CardBody>
             </Card>
             <Card shadow="sm" className="border">
               <CardHeader className="font-semibold">Тренер</CardHeader>
               <CardBody className="text-foreground/70 text-sm">
-                Ведение состава, планирование тренировок, наблюдение за метриками спортсменов.
+                Ведение состава, планирование тренировок, наблюдение за
+                метриками спортсменов.
               </CardBody>
             </Card>
             <Card shadow="sm" className="border">
@@ -102,7 +136,8 @@ export default function Index() {
             <Card shadow="sm" className="border">
               <CardHeader className="font-semibold">Аналитика</CardHeader>
               <CardBody className="text-foreground/70 text-sm">
-                Гибкая статистика по показателям, командам и видам спорта в реальном времени.
+                Гибкая статистика по показателям, командам и видам спорта в
+                реальном времени.
               </CardBody>
             </Card>
           </div>
@@ -113,7 +148,9 @@ export default function Index() {
       <section id="athletes" className="container pb-20">
         <div className="flex items-end justify-between mb-4">
           <h2 className="text-2xl font-bold">Спортсмены</h2>
-          <span className="text-sm text-foreground/60">Данные загружаются из API</span>
+          <span className="text-sm text-foreground/60">
+            Данные загружаются из API
+          </span>
         </div>
         <div className="bg-card rounded-lg border p-2">
           <Table
@@ -129,12 +166,21 @@ export default function Index() {
       {/* Neon notice */}
       <section className="container pb-16">
         <div className="bp4-callout bp4-intent-primary">
-          <h3 className="bp4-heading">Подключите базу данных Neon (PostgreSQL)</h3>
+          <h3 className="bp4-heading">
+            Подключите базу данных Neon (PostgreSQL)
+          </h3>
           <p>
-            Для постоянного хранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
+            Для постоянного хранения данных подключите Neon через MCP
+            интеграцию. Затем установите переменную окружения DATABASE_URL.
           </p>
           <ul className="list-disc ml-6 mt-2 text-sm">
-            <li>Шаг 1: Нажмите <a className="underline" href="#open-mcp-popover">Open MCP popover</a> и подключит�� Neon.</li>
+            <li>
+              Шаг 1: Нажмите{" "}
+              <a className="underline" href="#open-mcp-popover">
+                Open MCP popover
+              </a>{" "}
+              и подключит�� Neon.
+            </li>
             <li>Шаг 2: Установите DATABASE_URL в настройках проекта.</li>
           </ul>
         </div>
@@ -146,7 +192,9 @@ export default function Index() {
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-lg border bg-card p-4">
-      <div className="text-xs uppercase tracking-wide text-foreground/60">{label}</div>
+      <div className="text-xs uppercase tracking-wide text-foreground/60">
+        {label}
+      </div>
       <div className="text-2xl font-bold mt-1">{value}</div>
     </div>
   );
@@ -155,7 +203,9 @@ function StatCard({ label, value }: { label: string; value: number }) {
 function BrandMeter() {
   return (
     <div className="rounded-lg border bg-card p-3">
-      <Text size="small" className="text-foreground/60">Активность</Text>
+      <Text size="small" className="text-foreground/60">
+        Активность
+      </Text>
       <Stack anchor="center">
         <Meter
           values={[{ value: 70, color: "#10b981" }]}

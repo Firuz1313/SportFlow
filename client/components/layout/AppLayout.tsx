@@ -61,15 +61,31 @@ export default function AppLayout({ children }: AppLayoutProps) {
               </a>
             </Navbar.Heading>
             <Navbar.Divider />
-            <NavLink to="/" className={({ isActive }) => isActive ? "text-primary font-semibold" : "text-foreground/70 hover:text-foreground"}>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-primary font-semibold"
+                  : "text-foreground/70 hover:text-foreground"
+              }
+            >
               Главная
             </NavLink>
-            <NavLink to="/admin" className={({ isActive }) => `${isActive ? "text-primary font-semibold" : "text-foreground/70 hover:text-foreground"} ml-4`}>
+            <NavLink
+              to="/admin"
+              className={({ isActive }) =>
+                `${isActive ? "text-primary font-semibold" : "text-foreground/70 hover:text-foreground"} ml-4`
+              }
+            >
               Админ-панель
             </NavLink>
           </Navbar.Group>
           <Navbar.Group align={Alignment.RIGHT}>
-            <BPButton minimal intent="primary" className="hidden sm:inline-flex">
+            <BPButton
+              minimal
+              intent="primary"
+              className="hidden sm:inline-flex"
+            >
               Войти
             </BPButton>
             <BPButton intent="primary" className="ml-2">
@@ -79,14 +95,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </Navbar>
       </header>
 
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       <footer className="border-t mt-12">
         <div className="container py-8 text-sm text-foreground/60 flex items-center justify-between">
           <p>© {new Date().getFullYear()} SportFlow. Все права защищены.</p>
-          <p className="hidden sm:block">Система управления спортсме��ами • Аналитика • Роли • Медиа</p>
+          <p className="hidden sm:block">
+            Система управления спортсме��ами • Аналитика • Роли • Медиа
+          </p>
         </div>
       </footer>
 

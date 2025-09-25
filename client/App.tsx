@@ -22,7 +22,8 @@ const theme = {
       brand: "#10b981",
     },
     font: {
-      family: "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji",
+      family:
+        "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji",
       size: "16px",
       height: "24px",
     },

@@ -3,6 +3,9 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { listAthletes, createAthlete, updateAthlete, deleteAthlete } from "./routes/athletes";
+import path from "path";
+import expressStatic from "express";
+import { uploader, handleUpload } from "./routes/upload";
 
 export function createServer() {
   const app = express();

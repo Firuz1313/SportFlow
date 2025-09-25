@@ -28,6 +28,9 @@ export function createServer() {
   // Uploads
   app.post("/api/upload", uploader.single("file"), handleUpload);
 
+  // Seed DB with roles/users/athletes
+  app.post("/api/seed", runSeed);
+
   // Athlete CRUD
   app.get("/api/athletes", listAthletes);
   app.post("/api/athletes", createAthlete);

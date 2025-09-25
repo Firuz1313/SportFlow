@@ -21,7 +21,7 @@ const MobileTabbar = () => {
           index={activeIndex}
           renderTabs={() => [
             {
-              content: <div />, // Onsen requires a component, but we use it only for nav
+              content: <Page key="home" />,
               tab: (
                 <Tab
                   key="home"
@@ -32,7 +32,7 @@ const MobileTabbar = () => {
               ),
             },
             {
-              content: <div />,
+              content: <Page key="admin" />,
               tab: (
                 <Tab
                   key="admin"
@@ -86,7 +86,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <footer className="border-t mt-12">
         <div className="container py-8 text-sm text-foreground/60 flex items-center justify-between">
           <p>© {new Date().getFullYear()} SportFlow. Все права защищены.</p>
-          <p className="hidden sm:block">Система управления спортсменами • Аналитика • Роли • Медиа</p>
+          <p className="hidden sm:block">Система управления спортсме��ами • Аналитика • Роли • Медиа</p>
         </div>
       </footer>
 

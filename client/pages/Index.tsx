@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import ParallaxScene from "@/components/ui/ParallaxScene";
+import AnimatedBallPath from "@/components/ui/AnimatedBallPath";
 import { Table, Tag, Avatar } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Box, Meter, Stack, Text } from "grommet";
@@ -82,7 +83,7 @@ export default function Index() {
     <div className="relative">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-yellow-400/10" />
       {/* Hero */}
-      <section className="container py-16 md:py-24">
+      <section className="container relative py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
@@ -95,13 +96,13 @@ export default function Index() {
             <div className="mt-6 flex gap-3">
               <a
                 href="/admin"
-                className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-5 py-2.5 font-semibold shadow hover:opacity-90 transition"
+                className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-5 py-2.5 font-semibold shadow hover:opacity-90 transition transform hover:scale-[1.02] active:scale-95"
               >
                 Перейти в админ-панель
               </a>
               <a
                 href="#athletes"
-                className="inline-flex items-center justify-center rounded-md border px-5 py-2.5 font-semibold hover:bg-secondary transition"
+                className="inline-flex items-center justify-center rounded-md border px-5 py-2.5 font-semibold hover:bg-secondary transition transform hover:scale-[1.02] active:scale-95"
               >
                 Смотреть спортсменов
               </a>

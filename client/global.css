@@ -107,3 +107,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Motion path animation for sports ball */
+@keyframes path-progress {
+  0% {
+    offset-distance: 0%;
+    -webkit-offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+    -webkit-offset-distance: 100%;
+  }
+}

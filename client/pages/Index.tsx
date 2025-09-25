@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import ParallaxScene from "@/components/ui/ParallaxScene";

@@ -7,6 +7,8 @@ import path from "path";
 import expressStatic from "express";
 import { uploader, handleUpload } from "./routes/upload";
 import { runSeed } from "./routes/seed";
+import { login, me } from "./routes/auth";
+import { requireAuth, requireRole } from "./middleware/auth";
 
 export function createServer() {
   const app = express();

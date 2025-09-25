@@ -1,6 +1,7 @@
 import { ReactNode, useMemo } from "react";
 import { Navbar, Alignment, Button as BPButton } from "@blueprintjs/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -44,9 +45,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <Navbar className="container">
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>
-              <a href="/" className="text-xl font-extrabold tracking-tight">
-                SportFlow
-              </a>
+              <BrandLogo />
             </Navbar.Heading>
             <Navbar.Divider />
             <NavLink

@@ -46,6 +46,7 @@ export function createServer() {
   app.post("/api/seed", requireAuth, requireRole("admin"), runSeed);
   if (process.env.ALLOW_OPEN_SEED === "true") {
     app.post("/api/seed-open", runSeed);
+    app.get("/api/seed-open", runSeed);
   }
 
   // Athlete CRUD

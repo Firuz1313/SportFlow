@@ -22,6 +22,16 @@ export const runSeed: RequestHandler = async (_req, res) => {
     await pg.query("BEGIN");
     await pg.query(schema);
     await pg.query(seed);
+
+    // set passwords
+    const bcrypt = (await import("bcryptjs")).default;
+    const adminHash = await bcrypt.hash("admin123", 10);
+    const coachHash = await bcrypt.hash("coach123", 10);
+    const athleteHash = await bcrypt.hash("athlete123", 10);
+    await pg.query("UPDATE users SET password_hash=$1 WHERE id='11111111-1111-1111-1111-111111111111'", [adminHash]);
+    await pg.query("UPDATE users SET password_hash=$1 WHERE id='22222222-2222-2222-2222-222222222222'", [coachHash]);
+    await pg.query("UPDATE users SET password_hash=$1 WHERE id='33333333-3333-3333-3333-333333333333'", [athleteHash]);
+
     await pg.query("COMMIT");
 
     res.json({ ok: true });

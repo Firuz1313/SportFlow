@@ -12,12 +12,15 @@ async function fetchAthletes(): Promise<ListResponse<Athlete>> {
 
 export default function Admin() {
   const qc = useQueryClient();
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
+  const [user, setUser] = useState<{ email: string; roles: string[] } | null>(null);
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {} as any;
   const { data, isLoading } = useQuery({ queryKey: ["athletes"], queryFn: fetchAthletes });
   const items = data?.items ?? [];
 
   const createMutation = useMutation({
     mutationFn: async (payload: Partial<Athlete>) => {
-      const r = await fetch("/api/athletes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const r = await fetch("/api/athletes", { method: "POST", headers: { "Content-Type": "application/json", ...authHeaders }, body: JSON.stringify(payload) });
       if (!r.ok) throw new Error("Create failed");
       return r.json();
     },
@@ -26,7 +29,7 @@ export default function Admin() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: Partial<Athlete> }) => {
-      const r = await fetch(`/api/athletes/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+      const r = await fetch(`/api/athletes/${id}`, { method: "PUT", headers: { "Content-Type": "application/json", ...authHeaders }, body: JSON.stringify(patch) });
       if (!r.ok) throw new Error("Update failed");
       return r.json();
     },
@@ -35,7 +38,7 @@ export default function Admin() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const r = await fetch(`/api/athletes/${id}`, { method: "DELETE" });
+      const r = await fetch(`/api/athletes/${id}`, { method: "DELETE", headers: { ...authHeaders } });
       if (!r.ok) throw new Error("Delete failed");
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["athletes"] }),
@@ -93,8 +96,44 @@ export default function Admin() {
     <div className="container py-10">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Админ-панель</h1>
-        <Button onClick={async () => { const r = await fetch('/api/seed', { method: 'POST' }); r.ok ? message.success('Данные загружены') : message.error('Ошибка импорта'); qc.invalidateQueries({ queryKey: ['athletes'] }); }}>Загрузить демо-данные</Button>
+        <Button onClick={async () => { const r = await fetch('/api/seed', { method: 'POST', headers: { ...authHeaders } }); r.ok ? message.success('Данные загружены') : message.error('Ошибка импорта'); qc.invalidateQueries({ queryKey: ['athletes'] }); }}>Загрузить демо-данные</Button>
       </div>
+
+      {!token && (
+        <div className="mb-6">
+          <Alert
+            message="Требуется вход"
+            description={
+              <Form layout="inline" onFinish={async (values) => {
+                const r = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values) });
+                const data = await r.json();
+                if (r.ok) {
+                  localStorage.setItem('token', data.token);
+                  setToken(data.token);
+                  const me = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${data.token}` } });
+                  const meData = await me.json();
+                  setUser(meData.user);
+                  message.success('Вход выполнен');
+                } else {
+                  message.error(data.error || 'Ошибка входа');
+                }
+              }}>
+                <Form.Item name="email" rules={[{ required: true }]}>
+                  <Input placeholder="admin@sportflow.app" />
+                </Form.Item>
+                <Form.Item name="password" rules={[{ required: true }]}>
+                  <Input.Password placeholder="admin123" />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">Войти</Button>
+                </Form.Item>
+              </Form>
+            }
+            type="warning"
+            showIcon
+          />
+        </div>
+      )}
 
       <Tabs
         defaultActiveKey="manage"
@@ -139,7 +178,7 @@ export default function Admin() {
                         <Input placeholder="https://... или загрузите файл ниже" />
                       </Form.Item>
                       <Form.Item label="Загрузка фото">
-                        <Upload name="file" action="/api/upload" accept="image/*" showUploadList={false}
+                        <Upload name="file" action="/api/upload" accept="image/*" showUploadList={false} headers={authHeaders as any}
                           onChange={(info) => {
                             if (info.file.status === 'done') {
                               const url = info.file.response?.url;
@@ -155,7 +194,7 @@ export default function Admin() {
                         </Upload>
                       </Form.Item>
                       <Form.Item label="Загрузка видео">
-                        <Upload name="file" action="/api/upload" accept="video/*" showUploadList={false}
+                        <Upload name="file" action="/api/upload" accept="video/*" showUploadList={false} headers={authHeaders as any}
                           onChange={(info) => {
                             if (info.file.status === 'done') {
                               const url = info.file.response?.url;

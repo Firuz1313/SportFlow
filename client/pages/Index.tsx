@@ -85,7 +85,7 @@ export default function Index() {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-              Спортивная платформа управления спортсменами
+              Спортивная платформа управл��ния спортсменами
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
               Профили, роли, аналитика и медиа. Современный интерфейс для клуба,
@@ -114,6 +114,7 @@ export default function Index() {
             </div>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
+            <ParallaxScene />
             <Card shadow="sm" className="border">
               <CardHeader className="font-semibold">Администратор</CardHeader>
               <CardBody className="text-foreground/70 text-sm">
@@ -203,7 +204,7 @@ export default function Index() {
           <div className="bp4-callout bp4-intent-primary">
             <h3 className="bp4-heading">Подключите базу данных Neon (PostgreSQL)</h3>
             <p>
-              Для постоянного ��ранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
+              Для постоянного хранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
             </p>
           </div>
         </section>

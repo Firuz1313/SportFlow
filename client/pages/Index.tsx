@@ -203,11 +203,12 @@ export default function Index() {
           <div className="bp4-callout bp4-intent-primary">
             <h3 className="bp4-heading">Подключите базу данных Neon (PostgreSQL)</h3>
             <p>
-              Для постоянного хранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
+              Для постоянного ��ранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
             </p>
           </div>
         </section>
       )}
+      <a href="/admin" className="fixed right-6 bottom-6 sm:hidden inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition" aria-label="Добавить спортсмена">+</a>
     </div>
   );
 }

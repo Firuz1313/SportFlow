@@ -133,7 +133,39 @@ export default function Admin() {
                         <Input placeholder="Команда или клуб" />
                       </Form.Item>
                       <Form.Item name="avatarUrl" label="Фото (URL)">
-                        <Input placeholder="https://..." />
+                        <Input placeholder="https://... или загрузите файл ниже" />
+                      </Form.Item>
+                      <Form.Item label="Загрузка фото">
+                        <Upload name="file" action="/api/upload" accept="image/*" showUploadList={false}
+                          onChange={(info) => {
+                            if (info.file.status === 'done') {
+                              const url = info.file.response?.url;
+                              if (url) {
+                                form.setFieldsValue({ avatarUrl: url });
+                                message.success('Фото загружено');
+                              }
+                            } else if (info.file.status === 'error') {
+                              message.error('Ошибка загрузки');
+                            }
+                          }}>
+                          <Button>Загрузить фото</Button>
+                        </Upload>
+                      </Form.Item>
+                      <Form.Item label="Загрузка видео">
+                        <Upload name="file" action="/api/upload" accept="video/*" showUploadList={false}
+                          onChange={(info) => {
+                            if (info.file.status === 'done') {
+                              const url = info.file.response?.url;
+                              if (url) {
+                                form.setFieldsValue({ videoUrl: url });
+                                message.success('Видео загружено');
+                              }
+                            } else if (info.file.status === 'error') {
+                              message.error('Ошибка загрузки');
+                            }
+                          }}>
+                          <Button>Загрузить видео</Button>
+                        </Upload>
                       </Form.Item>
                       <div className="grid grid-cols-3 gap-3">
                         <Form.Item name="speed" label="Скорость">
@@ -152,7 +184,18 @@ export default function Admin() {
                 </div>
                 <div className="lg:col-span-2">
                   <div className="rounded-lg border p-2 bg-card">
-                    <Table rowKey="id" columns={columns} dataSource={items} loading={isLoading} pagination={{ pageSize: 8 }} />
+                    <Table rowKey="id" columns={columns} dataSource={items} loading={isLoading} pagination={{ pageSize: 8 }}
+                      expandable={{
+                        expandedRowRender: (a: Athlete) => (
+                          <div className="space-y-2">
+                            {a.avatarUrl && <img src={a.avatarUrl} alt="avatar" className="h-24 rounded" />}
+                            {a.videoUrl && (
+                              <video src={a.videoUrl} className="w-full" controls />
+                            )}
+                          </div>
+                        ),
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -160,7 +203,7 @@ export default function Admin() {
           },
           { key: "roles", label: "Роли и доступ", children: (
             <div className="rounded-lg border p-6 bg-card">
-              <p className="text-foreground/70">Здесь настраиваются роли пользователей (админ, тренер, спортсмен) и права доступа к разделам системы. Настроим после подключения аутентификации.</p>
+              <p className="text-foreground/70">Здесь настра��ваются роли пользователей (админ, тренер, спортсмен) и права доступа к разделам системы. Настроим после подключения аутентификации.</p>
             </div>
           ) },
         ]}

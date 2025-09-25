@@ -1,7 +1,6 @@
 import { ReactNode, useMemo } from "react";
 import { Navbar, Alignment, Button as BPButton } from "@blueprintjs/core";
-import { NavLink, useLocation } from "react-router-dom";
-import { Page, Tabbar, Tab } from "react-onsenui";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -9,43 +8,32 @@ interface AppLayoutProps {
 
 const MobileTabbar = () => {
   const location = useLocation();
-  const activeIndex = useMemo(() => {
-    if (location.pathname.startsWith("/admin")) return 1;
-    return 0;
-  }, [location.pathname]);
+  const navigate = useNavigate();
+  const isAdmin = location.pathname.startsWith("/admin");
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden">
-      <Page>
-        <Tabbar
-          index={activeIndex}
-          renderTabs={() => [
-            {
-              content: <Page key="home" />,
-              tab: (
-                <Tab
-                  key="home"
-                  label="Главная"
-                  icon="md-home"
-                  onClick={() => (window.location.href = "/")}
-                />
-              ),
-            },
-            {
-              content: <Page key="admin" />,
-              tab: (
-                <Tab
-                  key="admin"
-                  label="Админ"
-                  icon="md-settings"
-                  onClick={() => (window.location.href = "/admin")}
-                />
-              ),
-            },
-          ]}
-        />
-      </Page>
-    </div>
+    <nav className="fixed bottom-0 left-0 right-0 z-40 sm:hidden border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="mx-auto max-w-screen-2xl grid grid-cols-2 h-14">
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className={`flex items-center justify-center text-sm font-medium transition-colors ${
+            !isAdmin ? "text-primary" : "text-foreground/70 hover:text-foreground"
+          }`}
+        >
+          Главная
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/admin")}
+          className={`flex items-center justify-center text-sm font-medium transition-colors ${
+            isAdmin ? "text-primary" : "text-foreground/70 hover:text-foreground"
+          }`}
+        >
+          Админ
+        </button>
+      </div>
+    </nav>
   );
 };
 

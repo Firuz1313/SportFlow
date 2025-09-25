@@ -25,8 +25,8 @@ async function getPool() {
       video_url text,
       team text,
       metrics jsonb,
-      created_at timestamptz NOT NULL,
-      updated_at timestamptz NOT NULL
+      created_at timestamptz NOT NULL DEFAULT now(),
+      updated_at timestamptz NOT NULL DEFAULT now()
     );
   `);
   return pool;

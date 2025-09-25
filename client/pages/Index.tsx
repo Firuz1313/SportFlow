@@ -185,7 +185,7 @@ export default function Index() {
           <h2 className="text-2xl font-bold">Спортсмены</h2>
           <span className="text-sm text-foreground/60">Данные загружаются из API</span>
         </div>
-        <div className="rounded-xl border bg-card p-2">
+        <div className="rounded-xl border bg-card p-2 overflow-x-auto">
           <Table
             rowKey="id"
             columns={columns}

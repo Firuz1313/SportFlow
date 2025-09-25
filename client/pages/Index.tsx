@@ -154,9 +154,16 @@ export default function Index() {
         <section className="container pb-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {items.slice(0, 4).map((a) => (
-              <div key={a.id} className="rounded-xl border bg-card p-4 shadow-sm hover:shadow transition">
+              <div
+                key={a.id}
+                className="rounded-xl border bg-card p-4 shadow-sm hover:shadow transition"
+              >
                 <div className="flex items-center gap-3">
-                  <Avatar src={a.avatarUrl} size={48} style={{ backgroundColor: "#10b981", color: "white" }}>
+                  <Avatar
+                    src={a.avatarUrl}
+                    size={48}
+                    style={{ backgroundColor: "#10b981", color: "white" }}
+                  >
                     {a.firstName[0]}
                   </Avatar>
                   <div>
@@ -168,13 +175,19 @@ export default function Index() {
                 </div>
                 <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                   {a.metrics?.speed != null && (
-                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Скорость {a.metrics.speed}</div>
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">
+                      Скорость {a.metrics.speed}
+                    </div>
                   )}
                   {a.metrics?.endurance != null && (
-                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Вынос {a.metrics.endurance}</div>
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">
+                      Вынос {a.metrics.endurance}
+                    </div>
                   )}
                   {a.metrics?.strength != null && (
-                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Сила {a.metrics.strength}</div>
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">
+                      Сила {a.metrics.strength}
+                    </div>
                   )}
                 </div>
               </div>
@@ -187,7 +200,9 @@ export default function Index() {
       <section id="athletes" className="container pb-20">
         <div className="flex items-end justify-between mb-4">
           <h2 className="text-2xl font-bold">Спортсмены</h2>
-          <span className="text-sm text-foreground/60">Данные загружаются из API</span>
+          <span className="text-sm text-foreground/60">
+            Данные загружаются из API
+          </span>
         </div>
         <div className="rounded-xl border bg-card p-2 overflow-x-auto">
           <Table
@@ -205,14 +220,23 @@ export default function Index() {
       {items.length === 0 && (
         <section className="container pb-16">
           <div className="bp4-callout bp4-intent-primary">
-            <h3 className="bp4-heading">Подключите базу данных Neon (PostgreSQL)</h3>
+            <h3 className="bp4-heading">
+              Подключите базу данных Neon (PostgreSQL)
+            </h3>
             <p>
-              Для постоянного хранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
+              Для постоянного хранения данных подключите Neon через MCP
+              интеграцию. Затем установите переменную окружения DATABASE_URL.
             </p>
           </div>
         </section>
       )}
-      <a href="/admin" className="fixed right-6 bottom-6 sm:hidden inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition" aria-label="Доба��ить спортсмена">+</a>
+      <a
+        href="/admin"
+        className="fixed right-6 bottom-6 sm:hidden inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition"
+        aria-label="Доба��ить спортсмена"
+      >
+        +
+      </a>
     </div>
   );
 }

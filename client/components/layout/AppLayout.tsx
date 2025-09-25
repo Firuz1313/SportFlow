@@ -19,7 +19,9 @@ const MobileTabbar = () => {
           type="button"
           onClick={() => navigate("/")}
           className={`flex items-center justify-center text-sm font-medium transition-colors ${
-            !isAdmin ? "text-primary" : "text-foreground/70 hover:text-foreground"
+            !isAdmin
+              ? "text-primary"
+              : "text-foreground/70 hover:text-foreground"
           }`}
         >
           Главная
@@ -28,7 +30,9 @@ const MobileTabbar = () => {
           type="button"
           onClick={() => navigate("/admin")}
           className={`flex items-center justify-center text-sm font-medium transition-colors ${
-            isAdmin ? "text-primary" : "text-foreground/70 hover:text-foreground"
+            isAdmin
+              ? "text-primary"
+              : "text-foreground/70 hover:text-foreground"
           }`}
         >
           Админ

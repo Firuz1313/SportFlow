@@ -11,7 +11,12 @@ export default function SportsBall({ className, size = 64 }: Props) {
     <motion.div
       className={cn("select-none", className)}
       initial={{ y: 0, rotate: 0, scale: 0.95, opacity: 0 }}
-      animate={{ y: [0, -16, 0], rotate: [0, 15, -15, 0], scale: 1, opacity: 1 }}
+      animate={{
+        y: [0, -16, 0],
+        rotate: [0, 15, -15, 0],
+        scale: 1,
+        opacity: 1,
+      }}
       transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
     >
       <div

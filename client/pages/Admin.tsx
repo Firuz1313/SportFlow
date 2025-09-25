@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Athlete, ListResponse } from "@shared/api";
 import {
@@ -18,6 +19,8 @@ import {
   Alert,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { motion } from "framer-motion";
+import SportsBall from "@/components/ui/SportsBall";
 
 async function fetchAthletes(): Promise<ListResponse<Athlete>> {
   const r = await fetch("/api/athletes");
@@ -161,23 +164,27 @@ export default function Admin() {
   );
 
   return (
-    <div className="container py-10">
+    <div className="relative">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-yellow-400/10" />
+      <div className="container py-10">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Админ-панель</h1>
-        <Button
-          onClick={async () => {
-            const r = await fetch("/api/seed", {
-              method: "POST",
-              headers: { ...authHeaders },
-            });
-            r.ok
-              ? message.success("Данные загружены")
-              : message.error("Ошибка импорта");
-            qc.invalidateQueries({ queryKey: ["athletes"] });
-          }}
-        >
-          Загрузить демо-данные
-        </Button>
+        <motion.h1 initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="text-3xl font-bold">Админ-панель</motion.h1>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <Button
+            onClick={async () => {
+              const r = await fetch("/api/seed", {
+                method: "POST",
+                headers: { ...authHeaders },
+              });
+              r.ok
+                ? message.success("Данные загружены")
+                : message.error("Ошибка импорта");
+              qc.invalidateQueries({ queryKey: ["athletes"] });
+            }}
+          >
+            Загрузить демо-данные
+          </Button>
+        </motion.div>
       </div>
 
       {!token && (
@@ -236,7 +243,7 @@ export default function Admin() {
             children: (
               <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-1">
-                  <div className="rounded-lg border p-4 bg-card">
+                  <motion.div className="rounded-lg border p-4 bg-card" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     <h2 className="font-semibold mb-4">Создать спортсмена</h2>
                     <Form
                       form={form}
@@ -372,10 +379,10 @@ export default function Admin() {
                         Создать
                       </Button>
                     </Form>
-                  </div>
+                  </motion.div>
                 </div>
                 <div className="lg:col-span-2">
-                  <div className="rounded-lg border p-2 bg-card">
+                  <motion.div className="rounded-lg border p-2 bg-card overflow-x-auto" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                     <Table
                       rowKey="id"
                       columns={columns}
@@ -403,7 +410,7 @@ export default function Admin() {
                         ),
                       }}
                     />
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             ),
@@ -423,6 +430,8 @@ export default function Admin() {
           },
         ]}
       />
+      </div>
+      <SportsBall className="fixed right-6 bottom-6" />
     </div>
   );
 }

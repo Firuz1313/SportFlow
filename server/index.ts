@@ -24,6 +24,9 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Uploads
+  app.post("/api/upload", uploader.single("file"), handleUpload);
+
   // Athlete CRUD
   app.get("/api/athletes", listAthletes);
   app.post("/api/athletes", createAthlete);

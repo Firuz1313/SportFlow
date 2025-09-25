@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import ParallaxScene from "@/components/ui/ParallaxScene";
 import { Table, Tag, Avatar } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { Box, Meter, Stack, Text } from "grommet";
@@ -85,7 +86,7 @@ export default function Index() {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-              Спортивная платформа управл��ния спортсменами
+              Спортивная платформа управления спортсменами
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
               Профили, роли, аналитика и медиа. Современный интерфейс для клуба,

@@ -91,7 +91,10 @@ export default function Admin() {
 
   return (
     <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">Админ-панель</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Админ-панель</h1>
+        <Button onClick={async () => { const r = await fetch('/api/seed', { method: 'POST' }); r.ok ? message.success('Данные загружены') : message.error('Ошибка импорта'); qc.invalidateQueries({ queryKey: ['athletes'] }); }}>Загрузить демо-данные</Button>
+      </div>
 
       <Tabs
         defaultActiveKey="manage"
@@ -203,7 +206,7 @@ export default function Admin() {
           },
           { key: "roles", label: "Роли и доступ", children: (
             <div className="rounded-lg border p-6 bg-card">
-              <p className="text-foreground/70">Здесь настра��ваются роли пользователей (админ, тренер, спортсмен) и права доступа к разделам системы. Настроим после подключения аутентификации.</p>
+              <p className="text-foreground/70">Здесь настраиваются роли пользователей (админ, тренер, спортсмен) и права доступа к разделам системы. Настроим после подключения аутентификации.</p>
             </div>
           ) },
         ]}

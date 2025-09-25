@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Table, Tag, Avatar } from "antd";
@@ -77,18 +78,18 @@ export default function Index() {
   );
 
   return (
-    <div className="bg-gradient-to-b from-white to-secondary/30">
+    <div className="relative">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-yellow-400/10" />
       {/* Hero */}
       <section className="container py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-              Динамическая платформа управления спортсменами
+              Спортивная платформа управления спортсменами
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
-              Регистрация и профили, роли (админ/спортсмен/тренер), аналитика и
-              статистика, загрузка фото/видео и адаптивные интерфейсы для веба и
-              мобильных устройств.
+              Профили, роли, аналитика и медиа. Современный интерфейс для клуба,
+              тренера и спортсмена.
             </p>
             <div className="mt-6 flex gap-3">
               <a
@@ -144,47 +145,69 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Highlights */}
+      {items.length > 0 && (
+        <section className="container pb-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {items.slice(0, 4).map((a) => (
+              <div key={a.id} className="rounded-xl border bg-card p-4 shadow-sm hover:shadow transition">
+                <div className="flex items-center gap-3">
+                  <Avatar src={a.avatarUrl} size={48} style={{ backgroundColor: "#10b981", color: "white" }}>
+                    {a.firstName[0]}
+                  </Avatar>
+                  <div>
+                    <div className="font-semibold leading-tight">
+                      {a.firstName} {a.lastName}
+                    </div>
+                    <div className="text-xs text-foreground/60">{a.sport}</div>
+                  </div>
+                </div>
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                  {a.metrics?.speed != null && (
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Скорость {a.metrics.speed}</div>
+                  )}
+                  {a.metrics?.endurance != null && (
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Вынос {a.metrics.endurance}</div>
+                  )}
+                  {a.metrics?.strength != null && (
+                    <div className="rounded-md bg-secondary px-2 py-1 text-xs">Сила {a.metrics.strength}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Athletes preview */}
       <section id="athletes" className="container pb-20">
         <div className="flex items-end justify-between mb-4">
           <h2 className="text-2xl font-bold">Спортсмены</h2>
-          <span className="text-sm text-foreground/60">
-            Данные загружаются из API
-          </span>
+          <span className="text-sm text-foreground/60">Данные загружаются из API</span>
         </div>
-        <div className="bg-card rounded-lg border p-2">
+        <div className="rounded-xl border bg-card p-2">
           <Table
             rowKey="id"
             columns={columns}
             dataSource={items}
             loading={isLoading}
-            pagination={{ pageSize: 5, showTotal: (t) => `Всего: ${t}` }}
+            pagination={{ pageSize: 8, showTotal: (t) => `Всего: ${t}` }}
+            size="middle"
           />
         </div>
       </section>
 
-      {/* Neon notice */}
-      <section className="container pb-16">
-        <div className="bp4-callout bp4-intent-primary">
-          <h3 className="bp4-heading">
-            Подключите базу данных Neon (PostgreSQL)
-          </h3>
-          <p>
-            Для постоянного хранения данных подключите Neon через MCP
-            интеграцию. Затем установите переменную окружения DATABASE_URL.
-          </p>
-          <ul className="list-disc ml-6 mt-2 text-sm">
-            <li>
-              Шаг 1: Нажмите{" "}
-              <a className="underline" href="#open-mcp-popover">
-                Open MCP popover
-              </a>{" "}
-              и подключит�� Neon.
-            </li>
-            <li>Шаг 2: Установите DATABASE_URL в настройках проекта.</li>
-          </ul>
-        </div>
-      </section>
+      {/* Neon notice (hide when есть данные) */}
+      {items.length === 0 && (
+        <section className="container pb-16">
+          <div className="bp4-callout bp4-intent-primary">
+            <h3 className="bp4-heading">Подключите базу данных Neon (PostgreSQL)</h3>
+            <p>
+              Для постоянного хранения данных подключите Neon через MCP интеграцию. Затем установите переменную окружения DATABASE_URL.
+            </p>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

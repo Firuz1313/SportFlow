@@ -6,6 +6,7 @@ import { listAthletes, createAthlete, updateAthlete, deleteAthlete } from "./rou
 import path from "path";
 import expressStatic from "express";
 import { uploader, handleUpload } from "./routes/upload";
+import { runSeed } from "./routes/seed";
 
 export function createServer() {
   const app = express();

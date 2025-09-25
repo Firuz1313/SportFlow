@@ -146,6 +146,7 @@ export default function Index() {
             </Card>
           </div>
         </div>
+        <AnimatedBallPath className="absolute inset-0" />
       </section>
 
       {/* Highlights */}
@@ -211,7 +212,7 @@ export default function Index() {
           </div>
         </section>
       )}
-      <a href="/admin" className="fixed right-6 bottom-6 sm:hidden inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition" aria-label="Добавить спортсмена">+</a>
+      <a href="/admin" className="fixed right-6 bottom-6 sm:hidden inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition" aria-label="Доба��ить спортсмена">+</a>
     </div>
   );
 }

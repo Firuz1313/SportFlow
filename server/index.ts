@@ -27,17 +27,21 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Auth
+  app.post("/api/auth/login", login);
+  app.get("/api/auth/me", requireAuth, me);
+
   // Uploads
-  app.post("/api/upload", uploader.single("file"), handleUpload);
+  app.post("/api/upload", requireAuth, uploader.single("file"), handleUpload);
 
   // Seed DB with roles/users/athletes
-  app.post("/api/seed", runSeed);
+  app.post("/api/seed", requireAuth, requireRole("admin"), runSeed);
 
   // Athlete CRUD
   app.get("/api/athletes", listAthletes);
-  app.post("/api/athletes", createAthlete);
-  app.put("/api/athletes/:id", updateAthlete);
-  app.delete("/api/athletes/:id", deleteAthlete);
+  app.post("/api/athletes", requireAuth, requireRole("admin", "coach"), createAthlete);
+  app.put("/api/athletes/:id", requireAuth, requireRole("admin", "coach"), updateAthlete);
+  app.delete("/api/athletes/:id", requireAuth, requireRole("admin"), deleteAthlete);
 
   return app;
 }

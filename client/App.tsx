@@ -1,7 +1,4 @@
 import "./global.css";
-import "@blueprintjs/core/lib/css/blueprint.css";
-import "onsenui/css/onsenui.css";
-import "onsenui/css/onsen-css-components.css";
 
 import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";

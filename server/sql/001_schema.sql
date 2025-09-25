@@ -35,3 +35,7 @@ CREATE TABLE IF NOT EXISTS athletes (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Ensure defaults exist even if table was created earlier without them
+ALTER TABLE IF EXISTS athletes ALTER COLUMN created_at SET DEFAULT now();
+ALTER TABLE IF EXISTS athletes ALTER COLUMN updated_at SET DEFAULT now();

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Athlete, ListResponse } from "@shared/api";
 import {
@@ -18,6 +19,8 @@ import {
   Alert,
 } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { motion } from "framer-motion";
+import SportsBall from "@/components/ui/SportsBall";
 
 async function fetchAthletes(): Promise<ListResponse<Athlete>> {
   const r = await fetch("/api/athletes");
@@ -161,268 +164,289 @@ export default function Admin() {
   );
 
   return (
-    <div className="container py-10">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Админ-панель</h1>
-        <Button
-          onClick={async () => {
-            const r = await fetch("/api/seed", {
-              method: "POST",
-              headers: { ...authHeaders },
-            });
-            r.ok
-              ? message.success("Данные загружены")
-              : message.error("Ошибка импорта");
-            qc.invalidateQueries({ queryKey: ["athletes"] });
-          }}
-        >
-          Загрузить демо-данные
-        </Button>
-      </div>
-
-      {!token && (
-        <div className="mb-6">
-          <Alert
-            message="Требуется вход"
-            description={
-              <Form
-                layout="inline"
-                onFinish={async (values) => {
-                  const r = await fetch("/api/auth/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(values),
-                  });
-                  const data = await r.json();
-                  if (r.ok) {
-                    localStorage.setItem("token", data.token);
-                    setToken(data.token);
-                    const me = await fetch("/api/auth/me", {
-                      headers: { Authorization: `Bearer ${data.token}` },
-                    });
-                    const meData = await me.json();
-                    setUser(meData.user);
-                    message.success("Вход выполнен");
-                  } else {
-                    message.error(data.error || "Ошибка входа");
-                  }
-                }}
-              >
-                <Form.Item name="email" rules={[{ required: true }]}>
-                  <Input placeholder="admin@sportflow.app" />
-                </Form.Item>
-                <Form.Item name="password" rules={[{ required: true }]}>
-                  <Input.Password placeholder="admin123" />
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    Войти
-                  </Button>
-                </Form.Item>
-              </Form>
-            }
-            type="warning"
-            showIcon
-          />
+    <div className="relative">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-yellow-400/10" />
+      <div className="container py-10">
+        <div className="flex items-center justify-between mb-6">
+          <motion.h1
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-3xl font-bold"
+          >
+            Админ-панель
+          </motion.h1>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <Button
+              onClick={async () => {
+                const r = await fetch("/api/seed", {
+                  method: "POST",
+                  headers: { ...authHeaders },
+                });
+                r.ok
+                  ? message.success("Данные загружены")
+                  : message.error("Ошибка импорта");
+                qc.invalidateQueries({ queryKey: ["athletes"] });
+              }}
+            >
+              Загрузить демо-данные
+            </Button>
+          </motion.div>
         </div>
-      )}
 
-      <Tabs
-        defaultActiveKey="manage"
-        items={[
-          {
-            key: "manage",
-            label: "Спортсмены",
-            children: (
-              <div className="grid lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-1">
-                  <div className="rounded-lg border p-4 bg-card">
-                    <h2 className="font-semibold mb-4">Создать спортсмена</h2>
-                    <Form
-                      form={form}
-                      layout="vertical"
-                      onFinish={(values) =>
-                        createMutation.mutate({
-                          firstName: values.firstName,
-                          lastName: values.lastName,
-                          sport: values.sport,
-                          age: Number(values.age),
-                          team: values.team || undefined,
-                          avatarUrl: values.avatarUrl || undefined,
-                          metrics: {
-                            speed:
-                              values.speed != null
-                                ? Number(values.speed)
-                                : undefined,
-                            endurance:
-                              values.endurance != null
-                                ? Number(values.endurance)
-                                : undefined,
-                            strength:
-                              values.strength != null
-                                ? Number(values.strength)
-                                : undefined,
-                          },
-                        })
-                      }
+        {!token && (
+          <div className="mb-6">
+            <Alert
+              message="Требуется вход"
+              description={
+                <Form
+                  layout="inline"
+                  onFinish={async (values) => {
+                    const r = await fetch("/api/auth/login", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(values),
+                    });
+                    const data = await r.json();
+                    if (r.ok) {
+                      localStorage.setItem("token", data.token);
+                      setToken(data.token);
+                      const me = await fetch("/api/auth/me", {
+                        headers: { Authorization: `Bearer ${data.token}` },
+                      });
+                      const meData = await me.json();
+                      setUser(meData.user);
+                      message.success("Вход выполнен");
+                    } else {
+                      message.error(data.error || "Ошибка входа");
+                    }
+                  }}
+                >
+                  <Form.Item name="email" rules={[{ required: true }]}>
+                    <Input placeholder="admin@sportflow.app" />
+                  </Form.Item>
+                  <Form.Item name="password" rules={[{ required: true }]}>
+                    <Input.Password placeholder="admin123" />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Войти
+                    </Button>
+                  </Form.Item>
+                </Form>
+              }
+              type="warning"
+              showIcon
+            />
+          </div>
+        )}
+
+        <Tabs
+          defaultActiveKey="manage"
+          items={[
+            {
+              key: "manage",
+              label: "Спортсмены",
+              children: (
+                <div className="grid lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-1">
+                    <motion.div
+                      className="rounded-lg border p-4 bg-card"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                     >
-                      <Form.Item
-                        name="firstName"
-                        label="Имя"
-                        rules={[{ required: true }]}
+                      <h2 className="font-semibold mb-4">Создать спортсмена</h2>
+                      <Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={(values) =>
+                          createMutation.mutate({
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            sport: values.sport,
+                            age: Number(values.age),
+                            team: values.team || undefined,
+                            avatarUrl: values.avatarUrl || undefined,
+                            metrics: {
+                              speed:
+                                values.speed != null
+                                  ? Number(values.speed)
+                                  : undefined,
+                              endurance:
+                                values.endurance != null
+                                  ? Number(values.endurance)
+                                  : undefined,
+                              strength:
+                                values.strength != null
+                                  ? Number(values.strength)
+                                  : undefined,
+                            },
+                          })
+                        }
                       >
-                        <Input placeholder="Иван" />
-                      </Form.Item>
-                      <Form.Item
-                        name="lastName"
-                        label="Фамилия"
-                        rules={[{ required: true }]}
-                      >
-                        <Input placeholder="Иванов" />
-                      </Form.Item>
-                      <Form.Item
-                        name="sport"
-                        label="Вид спорта"
-                        rules={[{ required: true }]}
-                      >
-                        <Select
-                          options={[
-                            "Лёгкая атлетика",
-                            "Футбол",
-                            "Баскетбол",
-                            "Плавание",
-                            "Теннис",
-                          ].map((v) => ({ value: v, label: v }))}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        name="age"
-                        label="Возраст"
-                        rules={[{ required: true }]}
-                      >
-                        <InputNumber min={8} max={80} className="w-full" />
-                      </Form.Item>
-                      <Form.Item name="team" label="Команда">
-                        <Input placeholder="Команда или клуб" />
-                      </Form.Item>
-                      <Form.Item name="avatarUrl" label="Фото (URL)">
-                        <Input placeholder="https://... или загрузите файл ниже" />
-                      </Form.Item>
-                      <Form.Item label="Загрузка фото">
-                        <Upload
-                          name="file"
-                          action="/api/upload"
-                          accept="image/*"
-                          showUploadList={false}
-                          headers={authHeaders as any}
-                          onChange={(info) => {
-                            if (info.file.status === "done") {
-                              const url = info.file.response?.url;
-                              if (url) {
-                                form.setFieldsValue({ avatarUrl: url });
-                                message.success("Фото загружено");
-                              }
-                            } else if (info.file.status === "error") {
-                              message.error("Ошибка загрузки");
-                            }
-                          }}
+                        <Form.Item
+                          name="firstName"
+                          label="Имя"
+                          rules={[{ required: true }]}
                         >
-                          <Button>Загрузить фото</Button>
-                        </Upload>
-                      </Form.Item>
-                      <Form.Item label="Загрузка видео">
-                        <Upload
-                          name="file"
-                          action="/api/upload"
-                          accept="video/*"
-                          showUploadList={false}
-                          headers={authHeaders as any}
-                          onChange={(info) => {
-                            if (info.file.status === "done") {
-                              const url = info.file.response?.url;
-                              if (url) {
-                                form.setFieldsValue({ videoUrl: url });
-                                message.success("Видео загружено");
-                              }
-                            } else if (info.file.status === "error") {
-                              message.error("Ошибка загрузки");
-                            }
-                          }}
+                          <Input placeholder="Иван" />
+                        </Form.Item>
+                        <Form.Item
+                          name="lastName"
+                          label="Фамилия"
+                          rules={[{ required: true }]}
                         >
-                          <Button>Загрузить видео</Button>
-                        </Upload>
-                      </Form.Item>
-                      <div className="grid grid-cols-3 gap-3">
-                        <Form.Item name="speed" label="Скорость">
-                          <InputNumber min={0} max={15} className="w-full" />
+                          <Input placeholder="Иванов" />
                         </Form.Item>
-                        <Form.Item name="endurance" label="Вынослив.">
-                          <InputNumber min={0} max={100} className="w-full" />
+                        <Form.Item
+                          name="sport"
+                          label="Вид спорта"
+                          rules={[{ required: true }]}
+                        >
+                          <Select
+                            options={[
+                              "Лёгкая атлетика",
+                              "Футбол",
+                              "Баскетбол",
+                              "Плавание",
+                              "Теннис",
+                            ].map((v) => ({ value: v, label: v }))}
+                          />
                         </Form.Item>
-                        <Form.Item name="strength" label="Сила">
-                          <InputNumber min={0} max={100} className="w-full" />
+                        <Form.Item
+                          name="age"
+                          label="Возраст"
+                          rules={[{ required: true }]}
+                        >
+                          <InputNumber min={8} max={80} className="w-full" />
                         </Form.Item>
-                      </div>
-                      <Button
-                        type="primary"
-                        htmlType="submit"
-                        loading={createMutation.isPending}
-                        className="mt-2"
-                      >
-                        Создать
-                      </Button>
-                    </Form>
+                        <Form.Item name="team" label="Команда">
+                          <Input placeholder="Команда или клуб" />
+                        </Form.Item>
+                        <Form.Item name="avatarUrl" label="Фото (URL)">
+                          <Input placeholder="https://... или загрузите файл ниже" />
+                        </Form.Item>
+                        <Form.Item label="Загрузка фото">
+                          <Upload
+                            name="file"
+                            action="/api/upload"
+                            accept="image/*"
+                            showUploadList={false}
+                            headers={authHeaders as any}
+                            onChange={(info) => {
+                              if (info.file.status === "done") {
+                                const url = info.file.response?.url;
+                                if (url) {
+                                  form.setFieldsValue({ avatarUrl: url });
+                                  message.success("Фото загружено");
+                                }
+                              } else if (info.file.status === "error") {
+                                message.error("Ошибка загрузки");
+                              }
+                            }}
+                          >
+                            <Button>Загрузить фото</Button>
+                          </Upload>
+                        </Form.Item>
+                        <Form.Item label="Загрузка видео">
+                          <Upload
+                            name="file"
+                            action="/api/upload"
+                            accept="video/*"
+                            showUploadList={false}
+                            headers={authHeaders as any}
+                            onChange={(info) => {
+                              if (info.file.status === "done") {
+                                const url = info.file.response?.url;
+                                if (url) {
+                                  form.setFieldsValue({ videoUrl: url });
+                                  message.success("Видео загружено");
+                                }
+                              } else if (info.file.status === "error") {
+                                message.error("Ошибка загрузки");
+                              }
+                            }}
+                          >
+                            <Button>Загрузить видео</Button>
+                          </Upload>
+                        </Form.Item>
+                        <div className="grid grid-cols-3 gap-3">
+                          <Form.Item name="speed" label="Скорость">
+                            <InputNumber min={0} max={15} className="w-full" />
+                          </Form.Item>
+                          <Form.Item name="endurance" label="Вынослив.">
+                            <InputNumber min={0} max={100} className="w-full" />
+                          </Form.Item>
+                          <Form.Item name="strength" label="Сила">
+                            <InputNumber min={0} max={100} className="w-full" />
+                          </Form.Item>
+                        </div>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          loading={createMutation.isPending}
+                          className="mt-2"
+                        >
+                          Создать
+                        </Button>
+                      </Form>
+                    </motion.div>
+                  </div>
+                  <div className="lg:col-span-2">
+                    <motion.div
+                      className="rounded-lg border p-2 bg-card overflow-x-auto"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <Table
+                        rowKey="id"
+                        columns={columns}
+                        dataSource={items}
+                        loading={isLoading}
+                        pagination={{ pageSize: 8 }}
+                        expandable={{
+                          expandedRowRender: (a: Athlete) => (
+                            <div className="space-y-2">
+                              {a.avatarUrl && (
+                                <img
+                                  src={a.avatarUrl}
+                                  alt="avatar"
+                                  className="h-24 rounded"
+                                />
+                              )}
+                              {a.videoUrl && (
+                                <video
+                                  src={a.videoUrl}
+                                  className="w-full"
+                                  controls
+                                />
+                              )}
+                            </div>
+                          ),
+                        }}
+                      />
+                    </motion.div>
                   </div>
                 </div>
-                <div className="lg:col-span-2">
-                  <div className="rounded-lg border p-2 bg-card">
-                    <Table
-                      rowKey="id"
-                      columns={columns}
-                      dataSource={items}
-                      loading={isLoading}
-                      pagination={{ pageSize: 8 }}
-                      expandable={{
-                        expandedRowRender: (a: Athlete) => (
-                          <div className="space-y-2">
-                            {a.avatarUrl && (
-                              <img
-                                src={a.avatarUrl}
-                                alt="avatar"
-                                className="h-24 rounded"
-                              />
-                            )}
-                            {a.videoUrl && (
-                              <video
-                                src={a.videoUrl}
-                                className="w-full"
-                                controls
-                              />
-                            )}
-                          </div>
-                        ),
-                      }}
-                    />
-                  </div>
+              ),
+            },
+            {
+              key: "roles",
+              label: "Роли и доступ",
+              children: (
+                <div className="rounded-lg border p-6 bg-card">
+                  <p className="text-foreground/70">
+                    Здесь настраиваются роли пользователей (админ, тренер,
+                    спортсмен) и права доступа к разделам системы. Настроим
+                    после подключения аутентификации.
+                  </p>
                 </div>
-              </div>
-            ),
-          },
-          {
-            key: "roles",
-            label: "Роли и доступ",
-            children: (
-              <div className="rounded-lg border p-6 bg-card">
-                <p className="text-foreground/70">
-                  Здесь настраиваются роли пользователей (админ, тренер,
-                  спортсмен) и права доступа к разделам системы. Настроим после
-                  подключения аутентификации.
-                </p>
-              </div>
-            ),
-          },
-        ]}
-      />
+              ),
+            },
+          ]}
+        />
+      </div>
+      <SportsBall className="fixed right-6 bottom-6" />
     </div>
   );
 }

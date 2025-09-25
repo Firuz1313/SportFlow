@@ -30,9 +30,28 @@ const fileFilter: multer.Options["fileFilter"] = (_req, file, cb) => {
 
 export const uploader = multer({ storage, limits: { fileSize: 25 * 1024 * 1024 }, fileFilter });
 
-export const handleUpload: RequestHandler = (req, res) => {
+export const handleUpload: RequestHandler = async (req, res) => {
   const file = (req as any).file as Express.Multer.File | undefined;
   if (!file) return res.status(400).json({ error: "No file" });
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  if (supabaseUrl && supabaseKey) {
+    try {
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      const bucket = "media";
+      await supabase.storage.createBucket(bucket, { public: true }).catch(() => {});
+      const pathKey = `${Date.now()}-${path.basename(file.path)}`;
+      const { data, error } = await supabase.storage.from(bucket).upload(pathKey, file.buffer ?? undefined, { upsert: false });
+      if (error) throw error;
+      const { data: pub } = supabase.storage.from(bucket).getPublicUrl(data.path);
+      return res.status(201).json({ url: pub.publicUrl });
+    } catch (e) {
+      console.error("Supabase upload failed, falling back to local", e);
+    }
+  }
+
   const rel = `/uploads/${path.basename(file.path)}`;
   res.status(201).json({ url: rel });
 };
